@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:4.4
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  nestjs-api:
+    build:
+      context: ./gila-notification-api
+    container_name: gila-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/nestjs
+
+  nextjs-app:
+    build:
+      context: ./gila-notification-ui
+    container_name: gila-ui
+    ports:
+      - "3000:80"
+    depends_on:
+      - nestjs-api
+    networks:
+      - app-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  app-network:
+    driver: bridge
