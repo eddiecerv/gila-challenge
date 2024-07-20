@@ -48,3 +48,20 @@ Verify Docker installation by running:
 
 ```sh
 docker --version
+```
+
+### Step 2: Build and Run Containers
+
+Before run containers you need to give permission to execute to build_and_run.sh with next command.
+
+> chmod +x build_and_run.sh
+
+After that and Shell command have execute permissions you can run
+
+> ./build_and_run.sh
+
+This will build containers and compose up the full application.
+
+### Step 3: Use the app
+
+To go to application now visit http://localhost:3000

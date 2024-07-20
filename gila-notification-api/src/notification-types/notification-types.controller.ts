@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Get, Body } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -9,11 +9,9 @@ import {
 import { NotificationTypesService } from './notification-types.service';
 import { CreateNotificationTypeDto } from './dto/create-notification-type.dto';
 import { NotificationType } from './schemas/notification-type.schema';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('notification-types')
 @Controller('notification-types')
-@UseGuards(JwtAuthGuard)
 export class NotificationTypesController {
   constructor(
     private readonly notificationTypesService: NotificationTypesService,

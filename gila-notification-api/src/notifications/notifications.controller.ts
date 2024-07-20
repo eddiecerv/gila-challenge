@@ -7,6 +7,10 @@ import { UsersService } from 'src/users/users.service';
 import { CategoriesService } from 'src/categories/categories.service';
 import { LogsService } from 'src/logs/logs.service';
 import { NotificationTypesService } from 'src/notification-types/notification-types.service';
+import { Channel } from 'src/notification-types/enums/channels.enum';
+import { EmailNotificationService } from 'src/notification-types/email-notification/email-notification.service';
+import { PushNotificationService } from 'src/notification-types/push-notification/push-notification.service';
+import { SmsNotificationService } from 'src/notification-types/sms-notification/sms-notification.service';
 
 @ApiTags('notifications')
 @Controller('notifications')
@@ -18,6 +22,9 @@ export class NotificationsController {
     private readonly usersService: UsersService,
     private readonly categoriesService: CategoriesService,
     private readonly logsService: LogsService,
+    private readonly emailNotificationService: EmailNotificationService,
+    private readonly pushNotificationService: PushNotificationService,
+    private readonly smsNotificationService: SmsNotificationService,
   ) {}
 
   @Post()
@@ -39,19 +46,50 @@ export class NotificationsController {
 
       // Create a new notification for each Channel
       for await (const user of suscribedUsers) {
-        user.channels.forEach(async (channel) => {
-          const resultLog = await this.logsService.create({
+        for await (const channel of user.channels) {
+          const resultLog: any = await this.logsService.create({
             notification: newNotification._id,
             notificationType: channels.find((c) => c.tag === channel)._id,
             user: user.id,
           });
 
-          logs.push(resultLog);
-        });
-      }
-    }
+          // NOTE:
+          /**
+           * There are 2 approaches for notifications sending.
+           * 1. Use await to wait for all notifications to be sent, but
+           * if there are 1M suscriptions there will be a lot of
+           * time to wait in UI to finish.
+           * 2. Send notifications synchronously to avoid the user to wait
+           * until finish all sending (This is the used approach).
+           *
+           * Recommendation: Separate using Microservices for notifications.
+           */
 
-    return this.logsService.findAll();
+          // Send notification
+          if (channel === Channel.EMAIL) {
+            this.emailNotificationService.sendNotification({
+              email: user.email,
+              message: data.message,
+            });
+          } else if (channel === Channel.PUSH) {
+            this.pushNotificationService.sendNotification({
+              deviceId: user.phone,
+              message: data.message,
+            });
+          } else {
+            this.smsNotificationService.sendNotification({
+              phone: user.phone,
+              message: data.message,
+            });
+          }
+
+          const log = await this.logsService.findOne(resultLog._id);
+          logs.push(log);
+        }
+      }
+
+      return logs;
+    }
   }
 
   @Get()

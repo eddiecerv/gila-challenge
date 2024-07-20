@@ -1,12 +1,10 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SignUpDto } from './dto/signup.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('users')
 @Controller('users')
-@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -17,7 +15,7 @@ export class UsersController {
   }
 
   @Post()
-  @ApiOperation({ summary: 'Endpoint to Sign Up' })
+  @ApiOperation({ summary: 'Endpoint to Seed Users' })
   async create(@Body() body: SignUpDto) {
     return this.usersService.create({
       ...body,

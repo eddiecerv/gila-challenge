@@ -16,6 +16,11 @@ export default function LogsContainer({ logs }: { logs: Log[] }) {
         return "Mobile App";
     }
   }
+
+  if (!logs.length) {
+    return <></>;
+  }
+
   return (
     <Stack spacing={4} gap={4} className="overflow-y-auto h-96 shadow-md">
       {logs.map((log) => {

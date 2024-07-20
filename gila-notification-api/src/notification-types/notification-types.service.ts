@@ -26,4 +26,8 @@ export class NotificationTypesService {
   async findAll(): Promise<NotificationType[]> {
     return this.notificationTypeModel.find().exec();
   }
+
+  async findByTag(tag: string): Promise<NotificationType> {
+    return this.notificationTypeModel.findOne({ tag }).exec();
+  }
 }

@@ -20,6 +20,9 @@ import {
 } from 'src/notification-types/schemas/notification-type.schema';
 import { LogsService } from 'src/logs/logs.service';
 import { Log, LogSchema } from 'src/logs/schemas/log.schema';
+import { EmailNotificationService } from 'src/notification-types/email-notification/email-notification.service';
+import { SmsNotificationService } from 'src/notification-types/sms-notification/sms-notification.service';
+import { PushNotificationService } from 'src/notification-types/push-notification/push-notification.service';
 
 @Module({
   imports: [
@@ -37,6 +40,9 @@ import { Log, LogSchema } from 'src/logs/schemas/log.schema';
     CategoriesService,
     NotificationTypesService,
     LogsService,
+    EmailNotificationService,
+    SmsNotificationService,
+    PushNotificationService,
   ],
   controllers: [NotificationsController],
   exports: [NotificationsService],

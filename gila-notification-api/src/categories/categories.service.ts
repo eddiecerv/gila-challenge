@@ -22,4 +22,8 @@ export class CategoriesService {
   async findOne(categoryId: string): Promise<Category> {
     return this.categoryModel.findById(categoryId).exec();
   }
+
+  async findByTag(tag: string): Promise<Category> {
+    return this.categoryModel.findOne({ tag }).exec();
+  }
 }

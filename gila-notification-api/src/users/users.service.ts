@@ -9,6 +9,10 @@ import { UserDto } from './dto/user.dto';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
+  async findByEmail(email: string): Promise<User> {
+    return await this.userModel.findOne({ email }).exec();
+  }
+
   async findOne(email: string, password: string): Promise<UserDto | undefined> {
     const user = await this.userModel.findOne({ email }).exec();
 

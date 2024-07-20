@@ -19,14 +19,23 @@ import { useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
-const LogFormSchema = z.object({
-  categoryId: z.string({
-    required_error: "You need to choose a category",
-  }),
-  message: z.string({
-    required_error: "Please add a message for this notification",
-  }),
-});
+const LogFormSchema = z
+  .object({
+    categoryId: z
+      .string({
+        required_error: "You need to choose a category",
+      })
+      .min(1, "You need to choose a category"),
+    message: z
+      .string({
+        required_error: "Please add a message for this notification",
+      })
+      .min(3, "Please add a message for this notification"),
+  })
+  .required({
+    categoryId: true,
+    message: true,
+  });
 
 type Inputs = z.infer<typeof LogFormSchema>;
 
@@ -96,15 +105,15 @@ export default function CreateForm({ categories, onCreate }: Props) {
             <FormErrorMessage>{errors.categoryId.message}</FormErrorMessage>
           )}
         </FormControl>
-        <FormControl isInvalid={!!errors.categoryId?.message}>
+        <FormControl isInvalid={!!errors.message?.message}>
           <FormLabel>Message*</FormLabel>
           <Textarea
             rows={2}
             placeholder="Message to send"
             {...register("message")}
           />
-          {errors.categoryId && (
-            <FormErrorMessage>{errors.categoryId.message}</FormErrorMessage>
+          {errors.message && (
+            <FormErrorMessage>{errors.message.message}</FormErrorMessage>
           )}
         </FormControl>
         <FormControl>

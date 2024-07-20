@@ -6,12 +6,18 @@ import {
   NotificationType,
   NotificationTypeSchema,
 } from './schemas/notification-type.schema';
+import { PushNotificationModule } from './push-notification/push-notification.module';
+import { SmsNotificationModule } from './sms-notification/sms-notification.module';
+import { EmailNotificationModule } from './email-notification/email-notification.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: NotificationType.name, schema: NotificationTypeSchema },
     ]),
+    PushNotificationModule,
+    SmsNotificationModule,
+    EmailNotificationModule,
   ],
   providers: [NotificationTypesService],
   controllers: [NotificationTypesController],

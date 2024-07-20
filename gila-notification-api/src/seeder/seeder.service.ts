@@ -47,7 +47,12 @@ export class SeederService {
       },
     ];
 
-    for (const user of users) {
+    for await (const user of users) {
+      const userExists = await this.usersService.findByEmail(user.email);
+      if (userExists) {
+        continue;
+      }
+
       await this.usersService.create(user);
     }
   }
@@ -59,7 +64,14 @@ export class SeederService {
       { tag: 'movies', name: 'Movies' },
     ];
 
-    for (const category of categories) {
+    for await (const category of categories) {
+      const categoryExists = await this.categoriesService.findByTag(
+        category.tag,
+      );
+      if (categoryExists) {
+        continue;
+      }
+
       await this.categoriesService.create(category);
     }
   }
@@ -72,6 +84,11 @@ export class SeederService {
     ];
 
     for (const notificationType of notificationTypes) {
+      const notificationTypeExists =
+        await this.notificationTypesService.findByTag(notificationType.tag);
+      if (notificationTypeExists) {
+        continue;
+      }
       await this.notificationTypesService.create(notificationType);
     }
   }

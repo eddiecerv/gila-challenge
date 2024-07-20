@@ -16,7 +16,8 @@ export default function Main({ categories, logs }: Props) {
   const [logsList, setLogs] = useState(logs);
 
   function handleCreateLogs(logs: Log[]) {
-    setLogs(logs);
+    console.log("Logs on create?", logs);
+    setLogs((prevState) => [...prevState, ...logs]);
   }
 
   return (

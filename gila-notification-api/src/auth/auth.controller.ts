@@ -13,6 +13,9 @@ export class AuthController {
   @Post('login')
   @ApiOperation({ summary: 'Sign In to generate a JWT Token' })
   async login(@Body() data: LoginUserDto) {
-    return this.authService.login(data);
+    console.log('Sign in with:', data);
+    const signin = await this.authService.login(data);
+    console.log('Has data:', signin);
+    return signin;
   }
 }

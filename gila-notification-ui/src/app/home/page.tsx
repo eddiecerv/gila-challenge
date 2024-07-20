@@ -8,6 +8,7 @@ export default async function Page() {
   const categories = await getCategories()
     .then((res) => res.map((c: Category) => ({ ...c, id: c._id })) || [])
     .catch(() => []);
+
   const logs = await getNotificationLogs()
     .then((res) => res || [])
     .catch(() => []);

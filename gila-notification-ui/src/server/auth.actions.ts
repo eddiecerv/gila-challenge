@@ -8,5 +8,8 @@ export async function signIn(credentials: { email: string; password: string }) {
     body: JSON.stringify(credentials),
   })
     .then((res) => res.json())
-    .catch((e) => e);
+    .catch((e) => {
+      console.log("Error:", e);
+      return e;
+    });
 }
